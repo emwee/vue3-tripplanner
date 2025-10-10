@@ -3,7 +3,7 @@ import CountryPicker from '@/components/CountryPicker.vue'
 import CityPicker from '@/components/CityPicker.vue'
 import DatePicker from '@/components/DatePicker.vue'
 import ProductList from '@/components/ProductList.vue'
-import { ref, watchEffect } from 'vue'
+import { ref, useTemplateRef, watchEffect } from 'vue'
 import type { City, CityByCountry, Product } from '@/types'
 import { PREFILL_DATA } from '@/constants'
 import { getAvailableDates, getLocations, getProducts } from './helpers/api'
@@ -20,6 +20,8 @@ const selectedDate = ref('')
 const productResults = ref<Product[]>([])
 
 const cachedProducts = new Map<string, Product[]>()
+
+const datePickerRef = useTemplateRef('date-picker-ref')
 
 function cacheKey(cityId: string, date: string) {
   return `${cityId}-${date}`
@@ -63,14 +65,6 @@ watchEffect(async () => {
   cachedProducts.set(cacheKey(selectedCityId.value, selectedDate.value), result)
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function prefillData() {
-  selectedCountry.value = PREFILL_DATA.COUNTRY_NAME
-  selectedCityId.value = PREFILL_DATA.CITY_ID
-  selectedDate.value = PREFILL_DATA.DATE
-  cities.value = citiesByCountry.value[selectedCountry.value]
-}
-
 function handleSelectCountry(country: string) {
   console.log('handleSelectCountry', country)
   selectedCountry.value = country
@@ -79,6 +73,10 @@ function handleSelectCountry(country: string) {
   cities.value = selectedCountry.value ? citiesByCountry.value[selectedCountry.value] : []
 }
 function handleSelectCity(cityId: string) {
+  if (datePickerRef.value?.dateButtonsContainerRef) {
+    datePickerRef.value.dateButtonsContainerRef.scrollTo({ left: 0, behavior: 'smooth' })
+  }
+
   selectedCityId.value = cityId
   selectedDate.value = ''
 }
@@ -108,6 +106,7 @@ function handleSelectDate(date: string) {
         />
       </fieldset>
       <DatePicker
+        ref="date-picker-ref"
         :dates="availableDates"
         :disabled="!selectedCityId"
         :selectedDate="selectedDate"
