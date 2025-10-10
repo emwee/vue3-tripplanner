@@ -2,9 +2,9 @@ export const LOCALE = 'en-US'
 export const CURRENCY = 'EUR'
 
 export const API_URLs = {
-  DATES: 'http://localhost:8888/available_dates',
-  LOCATIONS: 'http://localhost:8888/locations',
-  PRODUCTS: 'http://localhost:8888/products',
+  DATES: './available_dates',
+  LOCATIONS: './locations',
+  PRODUCTS: './products',
 }
 
 export const PREFILL_DATA = {
