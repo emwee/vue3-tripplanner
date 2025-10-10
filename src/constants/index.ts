@@ -2,9 +2,9 @@ export const LOCALE = 'en-US'
 export const CURRENCY = 'EUR'
 
 export const API_URLs = {
-  DATES: './available_dates',
-  LOCATIONS: './locations',
-  PRODUCTS: './products',
+  DATES: `${import.meta.env.VITE_API_URL}/available_dates`,
+  LOCATIONS: `${import.meta.env.VITE_API_URL}/locations`,
+  PRODUCTS: `${import.meta.env.VITE_API_URL}/products`,
 }
 
 export const PREFILL_DATA = {

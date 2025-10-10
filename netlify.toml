@@ -19,3 +19,9 @@
   #  publish = "dist" # Folder with the static content for _redirect file
 
   ## more info on configuring this file: https://ntl.fyi/file-based-build-config
+
+[context.dev.environment]
+  API_URL = "http://localhost:8888"
+
+[context.dev.production]
+  API_URL = "https://vue3-tripplanner.netlify.app/"
