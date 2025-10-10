@@ -19,4 +19,6 @@ export interface Product {
   image: string
   discount_percentage?: number
   product_url: string
+  available_dates: string[]
+  city_id: number
 }

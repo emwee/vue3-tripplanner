@@ -54,16 +54,11 @@ watchEffect(async () => {
     return
   }
 
-  const result = await (
-    await fetch(
-      `${API_URLs.PRODUCTS}?${new URLSearchParams({
-        date: selectedDate.value,
-        city_id: selectedCityId.value,
-      }).toString()}`,
-    )
-  ).json()
+  const result: Product[] = await (await fetch(API_URLs.PRODUCTS)).json()
 
-  productResults.value = result
+  productResults.value = result.filter(({ city_id, available_dates }) => {
+    return city_id === Number(selectedCityId.value) && available_dates.includes(selectedDate.value)
+  })
   cachedProducts.set(cacheKey(selectedCityId.value, selectedDate.value), result)
 })
 
