@@ -4,8 +4,9 @@ import CityPicker from '@/components/CityPicker.vue'
 import DatePicker from '@/components/DatePicker.vue'
 import ProductList from '@/components/ProductList.vue'
 import { ref, watchEffect } from 'vue'
-import type { City, CityByCountry, Product, ResponseCityByCountry } from '@/types'
-import { API_URLs, PREFILL_DATA } from '@/constants'
+import type { City, CityByCountry, Product } from '@/types'
+import { PREFILL_DATA } from '@/constants'
+import { getAvailableDates, getLocations, getProducts } from './helpers/api'
 
 const availableDates = ref<string[]>([])
 const countries = ref<string[]>([])
@@ -25,9 +26,9 @@ function cacheKey(cityId: string, date: string) {
 }
 
 watchEffect(async () => {
-  availableDates.value = await (await fetch(API_URLs.DATES)).json()
+  availableDates.value = await getAvailableDates()
 
-  const response: ResponseCityByCountry = await (await fetch(API_URLs.LOCATIONS)).json()
+  const response = await getLocations()
   const countryNames = Object.keys(response)
 
   countries.value = countryNames
@@ -54,7 +55,7 @@ watchEffect(async () => {
     return
   }
 
-  const result: Product[] = await (await fetch(API_URLs.PRODUCTS)).json()
+  const result = await getProducts()
 
   productResults.value = result.filter(({ city_id, available_dates }) => {
     return city_id === Number(selectedCityId.value) && available_dates.includes(selectedDate.value)
